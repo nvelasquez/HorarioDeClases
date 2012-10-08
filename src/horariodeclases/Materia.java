@@ -1,10 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package horariodeclases;
-
-import excepciones.IsHorasValidas;
 
 public class Materia implements Docencia {
 	
@@ -47,9 +41,8 @@ public class Materia implements Docencia {
 		return horasDocencia;
 	}
 	
-	public void setHorasDocencia(int horasDocencia){
-	    this.horasDocencia = horasDocencia;
-            
+	public void setHorasDocencia(int horasDocencia) {
+		this.horasDocencia = horasDocencia;
 	}
 	
 	@Override//Sobreescribimos este metodo para que no se dupliquen materias.

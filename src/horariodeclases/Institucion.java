@@ -15,14 +15,13 @@ import excepciones.IsExisteObjeto;
 import excepciones.IsFaltaProfesorEx;
 import excepciones.IsProcesoInvalido;
 import java.lang.NumberFormatException;
-import excepciones.IsHorasValidas;
 
 public class Institucion {
 
     private Set<Materia>  materias   = new HashSet<Materia>();
     private Set<Profesor> profesores = new HashSet<Profesor>();
     private static List<Horario> horario = new ArrayList<Horario>();
-    private List<String> dias = new ArrayList<String>();
+    private List<String> dias = new ArrayList<String>();//Se podia hacer con un array pero para ampliar el uso de las listas se uso asi.
     private static String nombreInstitucion = "Itla School";
 
     public static void main(String[] args) throws IsExisteObjeto, IsFaltaProfesorEx, IsProcesoInvalido{
@@ -33,7 +32,7 @@ public class Institucion {
 
     //Creo el constructor por default que da inicio a la aplicacion
     public Institucion(String nombreInstitucion) {
-        this.nombreInstitucion = nombreInstitucion;
+        this.nombreInstitucion = nombreInstitucion;        
 
     }//Teermina el constructor
 
@@ -97,6 +96,9 @@ public class Institucion {
                     case "IH": {
                         Interfaz.imprimir();
                         todoBien = true;
+                    }
+                    case "EXIT": {
+                    	break;
                     }
 
                     default: {
@@ -170,12 +172,16 @@ public class Institucion {
             seAsigno = false;//Se hace falso para que no deje una materia sin asignar.
             materia = iMaterias.next();// Se inicia la primera materia
             
+            //conteo = 0;//Para que regrese los dias al lunes.
             if (conteoProfesores > profesores.size()){
                 return false;//Aqui evitamos que no hayan profesores que puedan cubrir todas las materias.
             }
             for (Profesor a: profesores){
                 if(seAsigno){
                     materia = iMaterias.next();// Instanciamos la siguiente materia si la que estaba antes se asigno.
+                }
+                if (conteo>=6){
+                	conteo = 0; //reiniciamos el valor de la variable para reiniciar los dias cuando llegue al ultimo.
                 }
                 if((a.getHorasDocencia() - materia.getHorasDocencia())>=0){
                     horario.add(new Horario(a.getNombre(),
@@ -188,7 +194,11 @@ public class Institucion {
                     
                     a.setHorasDocencia(a.getHorasDocencia()- materia.getHorasDocencia());
                     
+                    if (!iMaterias.hasNext()){
+                    	return true;
+                    }
                     seAsigno = true;
+                    
                 }else {
                     conteoProfesores++; //Para saber cuantos profesores no estan disponibles.
                     seAsigno = false;
@@ -210,5 +220,5 @@ public class Institucion {
         dias.add(4, "Viernes");
         dias.add(5, "Sabado");    
     }
-	
+
 }

@@ -1,9 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package excepciones;
-
 
 public class IsFaltaProfesorEx extends Exception {
 
@@ -31,5 +26,4 @@ public class IsFaltaProfesorEx extends Exception {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
-
 }

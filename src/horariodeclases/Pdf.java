@@ -3,12 +3,10 @@
  */
 package horariodeclases;
 
-/**
- * Imports necesarios 
- */
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -23,6 +21,8 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Chunk;
 
 /**
  * Esta clase crea un pdf con el horario generado de la instucion.
@@ -30,15 +30,21 @@ import com.itextpdf.text.BadElementException;
  * 
  */
 public class Pdf {
-    private String file = "/home/nvelasquez/horarioclases.pdf";
+    private String file = "C://Users/Nestor_velasquez/Desktop/Horario.pdf";
+    private String imageURL = "C://temp/Logo-ITLA.jpg";
     private String user = System.getProperty("user.name");
     private Font   redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
+    private Font   titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD, BaseColor.BLUE);
+    private Font userDateFont = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD, BaseColor.BLACK);
+    private Font cellFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
     /*
     * El constructor por defecto crea un objeto sin distincion.
     */
+   
     public Pdf(){
 
     }
+   
     public void  imprimirHorario() {
         try {
             Document documento = new Document();
@@ -49,16 +55,40 @@ public class Pdf {
             documento.close();
         }
         catch(Exception e){
-            e.printStackTrace();
+            System.err.println("Favor cierre el documento o coloquelo en una ruta accesible");
         }
     }
 
     public void crearTitulo(Document doc) throws DocumentException{
-        Paragraph parrafo = new Paragraph();
-        parrafo.add(new Paragraph("Horarios de clases de "+Institucion.getNombreInstitucion()));
-        parrafo.add(new Paragraph("Creado por "+user+" en fecha "+ new Date()));
-        agregarLinea(parrafo,5);
-        doc.add(parrafo);       
+    	try {
+	    	Paragraph title = new Paragraph("Horarios de clases de "+Institucion.getNombreInstitucion(),titleFont);
+	    	@SuppressWarnings("deprecation")
+	    	Paragraph userDate =  new Paragraph();
+	    	Date date = new Date();
+	    	Image image = Image.getInstance(imageURL);
+	    	Paragraph setImg = new Paragraph();
+	    	
+	    	//Agregar data.
+	    	setImg.add(new Chunk(image, 5f, 5f));
+	        userDate.add(new Paragraph("Creado por "+user+" en fecha "+ date.getDate()+"/"+date.getMonth()+"/"+(date.getYear()+1900), userDateFont));
+	        
+	        //Alineamos 
+	        userDate.setAlignment(Element.ALIGN_RIGHT);
+	        title.setAlignment(Element.ALIGN_CENTER);
+			
+			//Agregar linea
+			agregarLinea(title, 3);
+	        agregarLinea(userDate,2);
+	        
+	        //Agregar al Documento
+	        doc.add(userDate);
+	        doc.add(setImg);
+	        doc.add(title);  
+    	} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         
     }
     
@@ -96,23 +126,23 @@ public class Pdf {
             
             Horario hor = horario.next();
                         
-            c1 = new PdfPCell(new Phrase(hor.getDia()));
+            c1 = new PdfPCell(new Phrase(hor.getDia(), cellFont));
             c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tabla.addCell(c1);
             
-            c1 = new PdfPCell(new Phrase(hor.getNombreProfesor()));
+            c1 = new PdfPCell(new Phrase(hor.getNombreProfesor(), cellFont));
             c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tabla.addCell(c1);
             
-            c1 = new PdfPCell(new Phrase(hor.getNombreMateria()));
+            c1 = new PdfPCell(new Phrase(hor.getNombreMateria(), cellFont));
             c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tabla.addCell(c1);
             
-            c1 = new PdfPCell(new Phrase(hor.getTanda()));
+            c1 = new PdfPCell(new Phrase(hor.getTanda(), cellFont));
             c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tabla.addCell(c1);
             
-            c1 = new PdfPCell(new Phrase(Integer.toString(hor.getHorasDocencia())));
+            c1 = new PdfPCell(new Phrase(Integer.toString(hor.getHorasDocencia()), cellFont));
             c1.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tabla.addCell(c1);
         }
