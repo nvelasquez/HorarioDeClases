@@ -30,8 +30,8 @@ import com.itextpdf.text.Chunk;
  * 
  */
 public class Pdf {
-    private String file = "C://Users/Nestor_velasquez/Desktop/Horario.pdf";
-    private String imageURL = "C://temp/Logo-ITLA.jpg";
+    private String file = "/home/nvelasquez/Horario.pdf";
+    private String imageURL = "/home/nvelasquez/imgITLA.jpg";
     private String user = System.getProperty("user.name");
     private Font   redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
     private Font   titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD, BaseColor.BLUE);
