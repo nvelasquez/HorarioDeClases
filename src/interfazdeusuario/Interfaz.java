@@ -2,6 +2,9 @@ package interfazdeusuario;
 
 import java.util.Scanner;
 
+import excepciones.IsTandaValida;
+import excepciones.HorasValidas;
+
 import horariodeclases.Materia;
 import horariodeclases.Profesor;
 import horariodeclases.Pdf;
@@ -38,21 +41,34 @@ public class Interfaz {
 	}
 
 	//	En este metodo creamos la interfaz para insertar valores a un nuevo profesor
-	public static Profesor crearProfesor(){
-	    	System.out.println("Favor ingrese los datos del profesor");
+	public static Profesor crearProfesor()throws IsTandaValida, HorasValidas{
+            String tanda;
+            int horas;
+	    System.out.println("Favor ingrese los datos del profesor");
             System.out.print("Nombre: ");
             nombre = in.nextLine().trim();
             Profesor profesor = new Profesor(nombre);//instancio mi nuevo profesor con su nombre.
             System.out.print("Tanda: ");
-            profesor.setTanda(in.nextLine().trim());
+            tanda = in.nextLine().trim();
+            if (!verificarTanda(tanda)){
+                throw new IsTandaValida("Favor ingrese una tanda Valida, Manana, Noche o Tarde!");
+            }
+            profesor.setTanda(tanda);
             System.out.print("Horas de Docencia: ");
-            profesor.setHorasDocencia(Integer.parseInt(in.nextLine().trim()));
+            try{
+            horas = Integer.parseInt(in.nextLine().trim());
+            }
+            catch(NumberFormatException num){
+                throw new HorasValidas("Debe introducir un numero de horas validas!");
+            }
+            profesor.setHorasDocencia(horas);
             System.out.println();
             return profesor;//devolvemos el objeto profesor.
 	}
 
 	//En este metodo creamos la interfaz de usuario para el registro de una materia.
-	public static Materia crearMateria(){
+	public static Materia crearMateria()throws HorasValidas{
+            int horas;
             System.out.println("Favor ingrese los datos de la Materia");
             System.out.print("Nombre de materia: ");
             nombre = in.nextLine().trim();
@@ -60,7 +76,13 @@ public class Interfaz {
             System.out.print("Aula: ");
             materia.setAula(in.nextLine().trim());
             System.out.print("Horas de Docencia: ");
-            materia.setHorasDocencia(Integer.parseInt(in.nextLine().trim()));
+            try{
+                horas = Integer.parseInt(in.nextLine().trim());
+            }
+            catch(NumberFormatException num){
+                throw new HorasValidas("Debe introducir un numero de horas validas!");
+            }            
+            materia.setHorasDocencia(horas);
             System.out.println();
             return materia;//devolvemos el objeto Materia.
 	}
@@ -138,6 +160,22 @@ public class Interfaz {
         }
         imprimir();
 
+    }
+    
+    private static boolean verificarTanda(String tanda){
+        boolean ret = false;
+        switch(tanda.toUpperCase()){
+            case "NOCHE":{
+                ret = true;
+            }
+            case "MANANA":{
+                ret = true;
+            }
+            case "TARDE":{
+                ret = true;
+            }             
+        }
+        return ret;
     }
    
     public static void imprimir(){

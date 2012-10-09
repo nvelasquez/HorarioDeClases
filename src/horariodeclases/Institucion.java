@@ -14,7 +14,8 @@ import java.util.Set;
 import excepciones.IsExisteObjeto;
 import excepciones.IsFaltaProfesorEx;
 import excepciones.IsProcesoInvalido;
-import java.lang.NumberFormatException;
+import excepciones.IsTandaValida;
+import excepciones.HorasValidas;
 
 public class Institucion {
 
@@ -108,6 +109,9 @@ public class Institucion {
 
                     }	
                 }
+                catch (IsTandaValida tanda){
+                    System.err.println(tanda.getMessage());
+                }
                 catch(IsExisteObjeto existe){
                     System.err.println(existe.getMessage());
                 }
@@ -117,8 +121,8 @@ public class Institucion {
                 catch(IsProcesoInvalido inv){
                     System.err.println(inv.getMessage());
                 }                
-                catch(NumberFormatException badNum){
-                    System.err.println("Debe introducir un numero de horas valido");
+                catch(HorasValidas badNum){
+                    System.err.println(badNum.getMessage());
                 }                
 
                 finally {
